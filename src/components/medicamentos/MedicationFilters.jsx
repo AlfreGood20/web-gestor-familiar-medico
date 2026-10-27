@@ -9,7 +9,10 @@ function MedicationFilters({ filters, onChange, onSubmit, onClear }) {
       <div className="card-body p-5">
         <div className="mb-4 flex items-center gap-2 text-[#19304a]">
           <FunnelIcon className="size-5 text-[#15919a]" aria-hidden="true" />
-          <h2 className="font-bold">Filtrar medicamentos</h2>
+          <div>
+            <h2 className="font-bold">Filtrar medicamentos</h2>
+            <p className="text-xs font-normal text-slate-500">La búsqueda se actualiza mientras escribes.</p>
+          </div>
         </div>
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-5">
           <label className="input input-bordered flex items-center gap-2 bg-white lg:col-span-2">
