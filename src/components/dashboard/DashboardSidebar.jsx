@@ -10,12 +10,14 @@ import {
   PlusIcon,
   UserGroupIcon,
   UserIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 
 const navigationItems = [
   { label: 'Resumen', icon: HomeIcon, to: '/dashboard' },
-  { label: 'Integrantes', icon: UserGroupIcon },
+  { label: 'Integrantes', icon: UserGroupIcon, to: '/integrantes' },
+  { label: 'Cuidadores', icon: ShieldCheckIcon, to: '/cuidadores' },
   { label: 'Consultas médicas', icon: CalendarDaysIcon },
   { label: 'Medicamentos', icon: CubeIcon, to: '/medicamentos' },
   { label: 'Vacunas', icon: BeakerIcon },
