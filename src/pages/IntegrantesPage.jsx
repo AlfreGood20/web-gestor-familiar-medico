@@ -24,6 +24,8 @@ function IntegrantesPage() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [allergies, setAllergies] = useState([]);
+  const [allergyType, setAllergyType] = useState('');
+  const [allergiesLoading, setAllergiesLoading] = useState(false);
   const [allergySubmitting, setAllergySubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -51,13 +53,6 @@ function IntegrantesPage() {
       if (!cancelled) setLoading(false);
     });
     return () => { cancelled = true; };
-  }, []);
-
-  useEffect(() => {
-    getAlergias().then(setAllergies).catch((error) => {
-      toast.error('No se pudo cargar el catálogo de alergias.');
-      console.error('Error al cargar alergias:', error);
-    });
   }, []);
 
   const openDetail = async (id) => {
@@ -140,6 +135,23 @@ function IntegrantesPage() {
     }
   };
 
+  const handleAllergyTypeChange = async (type) => {
+    setAllergyType(type);
+    setAllergies([]);
+    if (!type) return;
+
+    setAllergiesLoading(true);
+    try {
+      // CONSUMO DE API: GET /alergia?tipo={tipo}.
+      setAllergies(await getAlergias({ tipo: type }));
+    } catch (error) {
+      toast.error('No se pudieron cargar las alergias de este tipo.');
+      console.error('Error al filtrar alergias:', error);
+    } finally {
+      setAllergiesLoading(false);
+    }
+  };
+
   const openCreate = () => {
     setFormData(emptyMember);
     setEditing(false);
@@ -173,8 +185,11 @@ function IntegrantesPage() {
       member={selected}
       loading={detailLoading}
       allergies={allergies}
+      allergyType={allergyType}
+      allergiesLoading={allergiesLoading}
       allergySubmitting={allergySubmitting}
       onAddAllergy={handleAddAllergy}
+      onAllergyTypeChange={handleAllergyTypeChange}
       onClose={() => setSelected(null)}
       onEdit={openEdit}
       onDelete={requestDelete}

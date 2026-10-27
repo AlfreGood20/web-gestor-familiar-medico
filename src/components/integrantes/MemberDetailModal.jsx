@@ -15,8 +15,11 @@ function MemberDetailModal({
   member,
   loading,
   allergies,
+  allergyType,
+  allergiesLoading,
   allergySubmitting,
   onAddAllergy,
+  onAllergyTypeChange,
   onClose,
   onEdit,
   onDelete,
@@ -84,7 +87,14 @@ function MemberDetailModal({
                 ) : <p className="mt-2 text-sm text-slate-500">Sin alergias registradas.</p>}
               </div>
 
-              <AllergyForm allergies={allergies} submitting={allergySubmitting} onSubmit={onAddAllergy} />
+              <AllergyForm
+                allergies={allergies}
+                allergyType={allergyType}
+                allergiesLoading={allergiesLoading}
+                submitting={allergySubmitting}
+                onTypeChange={onAllergyTypeChange}
+                onSubmit={onAddAllergy}
+              />
             </div>
 
             <div className="flex shrink-0 gap-2 border-t border-slate-100 bg-white px-6 py-4">

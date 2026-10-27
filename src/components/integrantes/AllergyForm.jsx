@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
+const allergyTypes = ['MEDICAMENTO', 'ALIMENTO', 'AMBIENTAL', 'CONTACTO', 'INSECTO', 'OTRA', 'SIN_DEFINIR'];
 const severities = ['LEVE', 'MODERADA', 'GRAVE'];
 
-function AllergyForm({ allergies, submitting, onSubmit }) {
+function AllergyForm({ allergies, allergyType, allergiesLoading, submitting, onTypeChange, onSubmit }) {
   const [data, setData] = useState({
     idAlergia: '',
     severidad: 'LEVE',
@@ -12,6 +13,11 @@ function AllergyForm({ allergies, submitting, onSubmit }) {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setData((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleTypeChange = (event) => {
+    setData((current) => ({ ...current, idAlergia: '' }));
+    onTypeChange(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -29,16 +35,30 @@ function AllergyForm({ allergies, submitting, onSubmit }) {
       <h4 className="font-bold text-[#19304a]">Agregar alergia</h4>
       <div className="mt-3 space-y-3">
         <select
+          value={allergyType}
+          onChange={handleTypeChange}
+          className="select select-bordered w-full bg-white"
+          required
+        >
+          <option value="">Selecciona un tipo</option>
+          {allergyTypes.map((type) => (
+            <option key={type} value={type}>{type.replaceAll('_', ' ')}</option>
+          ))}
+        </select>
+        <select
           name="idAlergia"
           value={data.idAlergia}
           onChange={handleChange}
           className="select select-bordered w-full bg-white"
           required
+          disabled={!allergyType || allergiesLoading}
         >
-          <option value="">Selecciona una alergia</option>
+          <option value="">
+            {allergiesLoading ? 'Cargando alergias...' : allergyType ? 'Selecciona una alergia' : 'Primero selecciona un tipo'}
+          </option>
           {allergies.map((allergy) => (
             <option key={allergy.id} value={allergy.id}>
-              {allergy.nombre} ({allergy.tipo})
+              {allergy.nombre}
             </option>
           ))}
         </select>
@@ -63,7 +83,7 @@ function AllergyForm({ allergies, submitting, onSubmit }) {
         />
         <button
           type="submit"
-          disabled={submitting || allergies.length === 0}
+          disabled={submitting || allergiesLoading || allergies.length === 0}
           className="btn btn-sm w-full border-0 bg-[#126f7b] text-white hover:bg-[#0b5d69]"
         >
           {submitting && <span className="loading loading-spinner loading-xs" />}
