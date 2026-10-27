@@ -3,7 +3,7 @@ import { BeakerIcon, ChevronLeftIcon, ChevronRightIcon, CubeIcon } from '@heroic
 import toast from 'react-hot-toast';
 import DashboardSidebar from '../components/dashboard/DashboardSidebar';
 import MedicationCard from '../components/medicamentos/MedicationCard';
-import MedicationDetailsPanel from '../components/medicamentos/MedicationDetailsPanel';
+import MedicationDetailsModal from '../components/medicamentos/MedicationDetailsModal';
 import MedicationFilters from '../components/medicamentos/MedicationFilters';
 import { getMedicamentoById, getMedicamentos } from '../services/medicationService';
 import { useNavigate } from 'react-router-dom';
@@ -39,6 +39,16 @@ function MedicamentosPage() {
   const [loading, setLoading] = useState(true);
   const [selectedMedication, setSelectedMedication] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+
+  useEffect(() => {
+    const filtersChanged = Object.keys(filters).some((key) => filters[key] !== queryFilters[key]);
+    if (!filtersChanged) return undefined;
+
+    const timer = setTimeout(() => {
+      setQueryFilters({ ...filters, page: 0 });
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [filters, queryFilters]);
 
   useEffect(() => {
     let cancelled = false;
@@ -141,8 +151,7 @@ function MedicamentosPage() {
           )}
         </div>
       </div>
-      {(selectedMedication || detailLoading) && <div className="fixed inset-0 z-40 bg-slate-900/20" onClick={() => !detailLoading && setSelectedMedication(null)} />}
-      <MedicationDetailsPanel medication={selectedMedication} loading={detailLoading} onClose={() => setSelectedMedication(null)} />
+      <MedicationDetailsModal medication={selectedMedication} loading={detailLoading} onClose={() => setSelectedMedication(null)} />
     </main>
   );
 }
