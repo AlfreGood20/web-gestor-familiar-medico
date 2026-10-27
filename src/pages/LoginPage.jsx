@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRightIcon,
   AtSymbolIcon,
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import {postLogin} from '../services/authService'
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ correo: '', contrasena: '' });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,6 +31,7 @@ function LoginPage() {
         success: '¡Login exitoso, Bienvenido!',
         error: 'Credenciales incorrectas',
       });
+      navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
