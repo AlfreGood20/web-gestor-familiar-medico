@@ -36,7 +36,6 @@ function MedicationFilters({ filters, onChange, onSubmit, onClear }) {
           </label>
           <div className="flex gap-2">
             <button type="button" onClick={onClear} className="btn btn-ghost btn-sm">Limpiar</button>
-            <button type="submit" className="btn btn-sm border-0 bg-[#126f7b] text-white hover:bg-[#0b5d69]">Buscar</button>
           </div>
         </div>
       </div>
